@@ -8,6 +8,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import ru.itmo.cs.app.interviewing.interview.domain.value.ScheduleId;
 import ru.itmo.cs.app.interviewing.interview.domain.value.ScheduleStatus;
+import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgScheduleEntity;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,6 +26,14 @@ public class Schedule {
                             now,
                             scheduledFor,
                             ScheduleStatus.ACTUAL);
+    }
+
+    public static Schedule hydrate(PgScheduleEntity pgScheduleEntity) {
+        return new Schedule(ScheduleId.hydrate(pgScheduleEntity.id()),
+                            pgScheduleEntity.createdAt().toInstant(),
+                            pgScheduleEntity.updatedAt().toInstant(),
+                            pgScheduleEntity.scheduledFor().toInstant(),
+                            ScheduleStatus.R.fromValue(pgScheduleEntity.status()));
     }
 
     public void cancel() {

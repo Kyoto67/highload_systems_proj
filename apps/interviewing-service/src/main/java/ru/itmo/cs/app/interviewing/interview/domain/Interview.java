@@ -18,6 +18,8 @@ import ru.itmo.cs.app.interviewing.interview.domain.event.InterviewScheduledEven
 import ru.itmo.cs.app.interviewing.interview.domain.specification.InterviewIsCancelledSpecification;
 import ru.itmo.cs.app.interviewing.interview.domain.specification.InterviewIsWaitingForConductSpecification;
 import ru.itmo.cs.app.interviewing.interview.domain.value.InterviewId;
+import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgInterviewEntity;
+import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgScheduleEntity;
 import ru.itmo.cs.app.interviewing.interviewer.domain.value.InterviewerId;
 
 @Getter
@@ -42,6 +44,18 @@ public class Interview {
                                                    new LinkedList<>(List.of(Schedule.create(scheduledFor))));
         createdInterview.events.add(InterviewScheduledEvent.fromEntity(createdInterview));
         return createdInterview;
+    }
+
+    public static Interview hydrate(
+            PgInterviewEntity pgInterviewEntity,
+            List<PgScheduleEntity> pgScheduleEntities
+    ) {
+        return new Interview(InterviewId.hydrate(pgInterviewEntity.interviewerId()),
+                             pgInterviewEntity.createdAt().toInstant(),
+                             pgInterviewEntity.updated_at().toInstant(),
+                             InterviewerId.hydrate(pgInterviewEntity.interviewerId()),
+                             CandidateId.hydrate(pgInterviewEntity.candidateId()),
+                             pgScheduleEntities.stream().map(Schedule::hydrate).toList());
     }
 
     public Instant getScheduledFor() {
