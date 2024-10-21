@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 
+import ru.itmo.cs.app.interviewing.candidate.domain.value.CandidateId;
 import ru.itmo.cs.app.interviewing.interview.domain.Interview;
 import ru.itmo.cs.app.interviewing.interview.domain.event.InterviewEvent;
 import ru.itmo.cs.app.interviewing.interview.domain.event.InterviewScheduledEvent;
@@ -22,6 +24,7 @@ import ru.ifmo.cs.domain_event.domain.stored_event.StoredDomainEventRepository;
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.mapper.PgInterviewEntityRowMapper;
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgInterviewEntity;
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgScheduleEntity;
+import ru.itmo.cs.app.interviewing.interviewer.domain.value.InterviewerId;
 
 public class PgInterviewRepositoryTest {
 
@@ -93,6 +96,11 @@ public class PgInterviewRepositoryTest {
         InterviewScheduledEvent event = mock(InterviewScheduledEvent.class);
 
         when(mockInterview.releaseEvents()).thenReturn(List.of(event));
+        when(mockInterview.getId()).thenReturn(InterviewId.generate());
+        when(mockInterview.getCreatedAt()).thenReturn(Instant.now());
+        when(mockInterview.getUpdatedAt()).thenReturn(Instant.now());
+        when(mockInterview.getInterviewerId()).thenReturn(InterviewerId.generate());
+        when(mockInterview.getCandidateId()).thenReturn(CandidateId.generate());
 
         repository.save(mockInterview);
 
@@ -106,7 +114,11 @@ public class PgInterviewRepositoryTest {
         InterviewEvent event = mock(InterviewEvent.class);
 
         when(mockInterview.releaseEvents()).thenReturn(List.of(event));
-
+        when(mockInterview.getId()).thenReturn(InterviewId.generate());
+        when(mockInterview.getCreatedAt()).thenReturn(Instant.now());
+        when(mockInterview.getUpdatedAt()).thenReturn(Instant.now());
+        when(mockInterview.getInterviewerId()).thenReturn(InterviewerId.generate());
+        when(mockInterview.getCandidateId()).thenReturn(CandidateId.generate());
         repository.save(mockInterview);
 
         verify(jdbcOperations).update(any(String.class), any(MapSqlParameterSource.class));
