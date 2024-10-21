@@ -2,7 +2,7 @@ package ru.itmo.cs.app.interviewing.interviewer.infrastructure.in_memory;
 
 import java.util.List;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.itmo.cs.app.interviewing.interviewer.application.query.InterviewersPageQueryService;
 import ru.itmo.cs.app.interviewing.interviewer.application.query.dto.InterviewersPage;
@@ -10,9 +10,14 @@ import ru.itmo.cs.app.interviewing.interviewer.domain.Interviewer;
 import ru.itmo.cs.app.interviewing.interviewer.domain.InterviewerRepository;
 
 @Service
-@AllArgsConstructor
 public class InMemoryStubInterviewersPageQueryService implements InterviewersPageQueryService {
     private final InterviewerRepository interviewerRepository;
+
+    public InMemoryStubInterviewersPageQueryService(
+            @Qualifier("inMemoryStubInterviewerRepository") InterviewerRepository interviewerRepository
+    ) {
+        this.interviewerRepository = interviewerRepository;
+    }
 
     @Override
     public InterviewersPage findFor(int page, int size) {

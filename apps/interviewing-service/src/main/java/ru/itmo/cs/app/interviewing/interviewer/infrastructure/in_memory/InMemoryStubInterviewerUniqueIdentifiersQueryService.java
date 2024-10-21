@@ -1,6 +1,6 @@
 package ru.itmo.cs.app.interviewing.interviewer.infrastructure.in_memory;
 
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.ifmo.cs.misc.UserId;
 import ru.itmo.cs.app.interviewing.interviewer.application.query.InterviewerUniqueIdentifiersQueryService;
@@ -9,9 +9,14 @@ import ru.itmo.cs.app.interviewing.interviewer.domain.InterviewerRepository;
 import ru.itmo.cs.app.interviewing.interviewer.domain.value.InterviewerId;
 
 @Service
-@AllArgsConstructor
 public class InMemoryStubInterviewerUniqueIdentifiersQueryService implements InterviewerUniqueIdentifiersQueryService {
     private final InterviewerRepository interviewerRepository;
+
+    public InMemoryStubInterviewerUniqueIdentifiersQueryService(
+            @Qualifier("inMemoryStubInterviewerRepository") InterviewerRepository interviewerRepository
+    ) {
+        this.interviewerRepository = interviewerRepository;
+    }
 
     @Override
     public InterviewerUniqueIdentifiersDto findBy(UserId userId) {
@@ -19,7 +24,7 @@ public class InMemoryStubInterviewerUniqueIdentifiersQueryService implements Int
                                     .stream()
                                     .filter(interviewer -> interviewer.getUserId().equals(userId))
                                     .findAny()
-                                    .map(InterviewerUniqueIdentifiersDto::hydrateFromEntity)
+                                    .map(InterviewerUniqueIdentifiersDto::fromEntity)
                                     .orElseThrow();
     }
 
@@ -29,7 +34,7 @@ public class InMemoryStubInterviewerUniqueIdentifiersQueryService implements Int
                 .stream()
                 .filter(interviewer -> interviewer.getId().equals(interviewerId))
                 .findAny()
-                .map(InterviewerUniqueIdentifiersDto::hydrateFromEntity)
+                .map(InterviewerUniqueIdentifiersDto::fromEntity)
                 .orElseThrow();
     }
 

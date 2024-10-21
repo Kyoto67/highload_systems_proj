@@ -10,6 +10,8 @@ public enum InterviewerStatus implements StringEnum {
     PENDING_ACTIVATION("pending_activation"),
     ;
 
+    public static final StringEnumResolver<InterviewerStatus> R = StringEnumResolver.r(InterviewerStatus.class);
+
     @JsonValue private final String value;
 
     InterviewerStatus(String value) {
@@ -21,5 +23,4 @@ public enum InterviewerStatus implements StringEnum {
         return value;
     }
 
-    private static final StringEnumResolver<InterviewerStatus> R = StringEnumResolver.r(InterviewerStatus.class);
 }

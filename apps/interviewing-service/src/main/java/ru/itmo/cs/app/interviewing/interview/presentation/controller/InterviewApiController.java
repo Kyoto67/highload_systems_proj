@@ -2,6 +2,7 @@ package ru.itmo.cs.app.interviewing.interview.presentation.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,11 +28,20 @@ import ru.itmo.cs.app.interviewing.interviewer.domain.value.InterviewerId;
 import ru.itmo.cs.command_bus.CommandBus;
 
 @RestController
-@AllArgsConstructor
 public class InterviewApiController {
     private final CommandBus commandBus;
     private final InterviewRepository interviewRepository;
     private final InterviewPageQueryService interviewPageQueryService;
+
+    public InterviewApiController(
+            CommandBus commandBus,
+            @Qualifier("pgInterviewRepository") InterviewRepository interviewRepository,
+            @Qualifier("pgInterviewPageQueryService") InterviewPageQueryService interviewPageQueryService
+    ) {
+        this.commandBus = commandBus;
+        this.interviewRepository = interviewRepository;
+        this.interviewPageQueryService = interviewPageQueryService;
+    }
 
     @PostMapping("/api/v1/interviews/schedule")
     public ResponseEntity<?> scheduleInterview(
