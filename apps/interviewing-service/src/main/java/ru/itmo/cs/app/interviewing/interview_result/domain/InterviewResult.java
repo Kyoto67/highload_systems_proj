@@ -34,6 +34,22 @@ public class InterviewResult {
         return interviewResult;
     }
 
+    public static InterviewResult hydrate(
+            String id,
+            Instant createdAt,
+            Instant updatedAt,
+            String feedbackId,
+            String verdict
+    ) {
+        return new InterviewResult(
+                InterviewResultId.hydrate(id),
+                createdAt,
+                updatedAt,
+                FeedbackId.hydrate(feedbackId),
+                Verdict.R.fromValue(verdict)
+        );
+    }
+
     public List<InterviewResultEvent> releaseEvents() {
         List<InterviewResultEvent> releasedEvents = events;
         events = new LinkedList<>();

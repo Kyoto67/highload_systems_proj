@@ -3,9 +3,11 @@ package ru.itmo.cs.app.interviewing.interview.infrastructure.pg;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.ifmo.cs.domain_event.domain.stored_event.StoredDomainEvent;
 import ru.ifmo.cs.domain_event.domain.stored_event.StoredDomainEventRepository;
 import ru.itmo.cs.app.interviewing.interview.domain.Interview;
@@ -17,7 +19,8 @@ import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgIntervie
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgScheduleEntity;
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.mapper.PgInterviewEntityRowMapper;
 
-@Component
+@Primary
+@Repository
 @AllArgsConstructor
 public class PgInterviewRepository implements InterviewRepository {
     private final NamedParameterJdbcOperations jdbcOperations;
@@ -82,6 +85,7 @@ public class PgInterviewRepository implements InterviewRepository {
         return entities.stream().map(e -> Interview.hydrate(e, pgScheduleEntityDao.findFor(e))).toList();
     }
 
+    @Transactional
     @Override
     public void save(Interview interview) {
         List<InterviewEvent> releasedEvents = interview.releaseEvents();

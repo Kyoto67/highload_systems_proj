@@ -6,8 +6,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Component;
-import ru.itmo.cs.app.interviewing.interview.domain.Schedule;
-import ru.itmo.cs.app.interviewing.interview.domain.value.InterviewId;
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgInterviewEntity;
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.entity.PgScheduleEntity;
 import ru.itmo.cs.app.interviewing.interview.infrastructure.pg.mapper.PgScheduleEntityRowMapper;

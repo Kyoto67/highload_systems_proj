@@ -54,6 +54,24 @@ public class Interviewer {
         return createdEntity;
     }
 
+    public static Interviewer hydrate(
+            String id,
+            long userId,
+            String fullName,
+            Instant createdAt,
+            Instant updatedAt,
+            String status
+    ) {
+        return new Interviewer(
+                InterviewerId.hydrate(id),
+                UserId.of(userId),
+                Name.of(fullName),
+                createdAt,
+                updatedAt,
+                InterviewerStatus.R.fromValue(status)
+        );
+    }
+
     public void activate() {
         validateCanBeActivated();
         interviewerStatus = InterviewerStatus.ACTIVE;
